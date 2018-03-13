@@ -2,6 +2,7 @@ package com.example.ehteshs1.foodpot;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.telecom.Call;
 import android.util.Log;
 import android.widget.ProgressBar;
@@ -21,12 +22,19 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity implements FetchRecipes.FetchRecipeInterface{
 
 
+    MainViewRecipeAdapter adapter;
     ArrayList<Recipy> recipies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        RecyclerView recipleTitleRecyclerView = findViewById(R.id.recyclerView);
+
+        adapter = new MainViewRecipeAdapter(this);
+
+        recipleTitleRecyclerView.setAdapter(adapter);
 
         String baseUrl = "https://d17h27t6h515a5.cloudfront.net";
 
@@ -44,6 +52,11 @@ public class MainActivity extends AppCompatActivity implements FetchRecipes.Fetc
 
         call.enqueue(task);
 
+        //setup recycler view
+
+
+
+
     }
 
 
@@ -51,8 +64,8 @@ public class MainActivity extends AppCompatActivity implements FetchRecipes.Fetc
     public void fetchCompleted(Response<List<Recipy>> response) {
 
         recipies = (ArrayList<Recipy>) response.body();
-        Log.d("sometag",recipies.size()+"");
 
+        adapter.setData(recipies);
 
     }
 }
