@@ -12,24 +12,25 @@ import com.example.ehteshs1.foodpot.model.Recipy;
 
 import java.util.ArrayList;
 
-public class MainViewRecipeAdapter extends RecyclerView.Adapter<MainViewRecipeAdapter.MyViewHolder>{
+public class DetailRecipeViewAdapter extends RecyclerView.Adapter<DetailRecipeViewAdapter.MyViewHolder>{
 
-    private ArrayList<Recipy> recipyArrayList;
+    private ArrayList<Recipy> ingredientList;
+
     private Context mContext;
 
 
-    public MainViewRecipeAdapter(Context context){
+    public DetailRecipeViewAdapter(Context context){
         mContext = context;
     }
 
     public void setData(ArrayList<Recipy> recipies){
-        recipyArrayList = recipies;
+        ingredientList = recipies;
         notifyDataSetChanged();
     }
 
 
     @Override
-    public MainViewRecipeAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public DetailRecipeViewAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View mainView = LayoutInflater.from(mContext).inflate(R.layout.recipe_main_item_layout, parent,false);
 
@@ -37,9 +38,9 @@ public class MainViewRecipeAdapter extends RecyclerView.Adapter<MainViewRecipeAd
     }
 
     @Override
-    public void onBindViewHolder(MainViewRecipeAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(DetailRecipeViewAdapter.MyViewHolder holder, int position) {
 
-        Recipy currentRecipe = recipyArrayList.get(position);
+        Recipy currentRecipe = ingredientList.get(position);
 
         final String title = currentRecipe.getName();
 
@@ -58,10 +59,10 @@ public class MainViewRecipeAdapter extends RecyclerView.Adapter<MainViewRecipeAd
 
     @Override
     public int getItemCount() {
-        if (recipyArrayList==null){
+        if (ingredientList ==null){
             return 0;
         }
-        return recipyArrayList.size();
+        return ingredientList.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder{
