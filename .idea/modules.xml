@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Foodpot.iml" filepath="$PROJECT_DIR$/.idea/Foodpot.iml" />
       <module fileurl="file://$PROJECT_DIR$/Foodpot.iml" filepath="$PROJECT_DIR$/Foodpot.iml" />
+      <module fileurl="file://C:\Users\ehteshs1\Documents\GithubProjects\Foodpot\.idea\Foodpot.iml" filepath="C:\Users\ehteshs1\Documents\GithubProjects\Foodpot\.idea\Foodpot.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

@@ -1,6 +1,7 @@
 package com.example.ehteshs1.foodpot;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,22 +16,22 @@ import com.example.ehteshs1.foodpot.model.Step;
 
 import java.util.ArrayList;
 
-public class DetailRecipeViewAdapter extends RecyclerView.Adapter<DetailRecipeViewAdapter.MyViewHolder>{
+public class DetailRecipeViewAdapter extends RecyclerView.Adapter<DetailRecipeViewAdapter.MyViewHolder> {
 
     private ArrayList<Ingredient> ingredientList;
     private ArrayList<Step> recipeSteps;
     private Recipy mSelectedRecipe;
-    private String recipeStepDetails="";
+    private String recipeStepDetails = "";
     private boolean isTextViewClicked = false;
 
     private Context mContext;
 
 
-    public DetailRecipeViewAdapter(Context context){
+    public DetailRecipeViewAdapter(Context context) {
         mContext = context;
     }
 
-    public void setData(Recipy selectedRecipe){
+    public void setData(Recipy selectedRecipe) {
         mSelectedRecipe = selectedRecipe;
         ingredientList = (ArrayList<Ingredient>) selectedRecipe.getIngredients();
         recipeSteps = (ArrayList<Step>) selectedRecipe.getSteps();
@@ -41,7 +42,7 @@ public class DetailRecipeViewAdapter extends RecyclerView.Adapter<DetailRecipeVi
     @Override
     public DetailRecipeViewAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View mainView = LayoutInflater.from(mContext).inflate(R.layout.recipe_detail_view_item_layout, parent,false);
+        View mainView = LayoutInflater.from(mContext).inflate(R.layout.recipe_detail_view_item_layout, parent, false);
 
         return new MyViewHolder(mainView);
     }
@@ -49,30 +50,37 @@ public class DetailRecipeViewAdapter extends RecyclerView.Adapter<DetailRecipeVi
     @Override
     public void onBindViewHolder(final DetailRecipeViewAdapter.MyViewHolder holder, final int position) {
 
-
-
-        if (position==0){
+        if (position == 0) {
 
             holder.recipeDetails.setText("Ingredients");
 
-        }else {
+        } else {
 
-            Step recipeStep = recipeSteps.get(position-1);
-            recipeStepDetails = recipeStep.getDescription();
+            Step recipeStep = recipeSteps.get(position - 1);
+            recipeStepDetails = recipeStep.getShortDescription();
 
-            if (recipeStepDetails!=null){
+            if (recipeStepDetails != null) {
                 holder.recipeDetails.setText(recipeStepDetails);
-            }else {
+            } else {
                 holder.recipeDetails.setText("No value entered");
             }
-
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Toast.makeText(mContext,DetailRecipeViewAdapter.this.recipeStepDetails,Toast.LENGTH_SHORT).show();
+                if (position == 0) {
+                    Intent ingredientIntent = new Intent(mContext, IngredientsListActivity.class);
+                    ingredientIntent.putParcelableArrayListExtra("ingredientList", ingredientList);
+                    mContext.startActivity(ingredientIntent);
+
+                } else {
+                    Intent detailStepIntent = new Intent(mContext, StepDetailActivity.class);
+                    detailStepIntent.putParcelableArrayListExtra("stepDetails", recipeSteps);
+                    detailStepIntent.putExtra("currentPosition", position-1);
+                    mContext.startActivity(detailStepIntent);
+                }
 
             }
         });
@@ -81,14 +89,14 @@ public class DetailRecipeViewAdapter extends RecyclerView.Adapter<DetailRecipeVi
 
     @Override
     public int getItemCount() {
-        if (ingredientList ==null){
+        if (ingredientList == null) {
             return 0;
         }
-        return recipeSteps.size()+1;
+        return recipeSteps.size() + 1;
     }
 
 
-    class MyViewHolder extends RecyclerView.ViewHolder{
+    class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView recipeDetails;
 
