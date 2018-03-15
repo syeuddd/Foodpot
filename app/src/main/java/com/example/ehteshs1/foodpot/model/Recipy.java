@@ -1,11 +1,15 @@
 
 package com.example.ehteshs1.foodpot.model;
 
+import android.os.Parcel;
+import android.os.Parcelable.Creator;
+
+import java.util.ArrayList;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Recipy {
+public class Recipy implements android.os.Parcelable {
 
     @SerializedName("id")
     @Expose
@@ -74,4 +78,44 @@ public class Recipy {
         this.image = image;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeString(this.name);
+        dest.writeList(this.ingredients);
+        dest.writeList(this.steps);
+        dest.writeInt(this.servings);
+        dest.writeString(this.image);
+    }
+
+    public Recipy() {
+    }
+
+    protected Recipy(Parcel in) {
+        this.id = in.readInt();
+        this.name = in.readString();
+        this.ingredients = new ArrayList<Ingredient>();
+        in.readList(this.ingredients, Ingredient.class.getClassLoader());
+        this.steps = new ArrayList<Step>();
+        in.readList(this.steps, Step.class.getClassLoader());
+        this.servings = in.readInt();
+        this.image = in.readString();
+    }
+
+    public static final Creator<Recipy> CREATOR = new Creator<Recipy>() {
+        @Override
+        public Recipy createFromParcel(Parcel source) {
+            return new Recipy(source);
+        }
+
+        @Override
+        public Recipy[] newArray(int size) {
+            return new Recipy[size];
+        }
+    };
 }

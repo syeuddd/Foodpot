@@ -1,6 +1,7 @@
 package com.example.ehteshs1.foodpot;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,7 +40,7 @@ public class MainViewRecipeAdapter extends RecyclerView.Adapter<MainViewRecipeAd
     @Override
     public void onBindViewHolder(MainViewRecipeAdapter.MyViewHolder holder, int position) {
 
-        Recipy currentRecipe = recipyArrayList.get(position);
+        final Recipy currentRecipe = recipyArrayList.get(position);
 
         final String title = currentRecipe.getName();
 
@@ -49,8 +50,9 @@ public class MainViewRecipeAdapter extends RecyclerView.Adapter<MainViewRecipeAd
             @Override
             public void onClick(View view) {
                 Toast.makeText(mContext,title,Toast.LENGTH_SHORT).show();
-//                Intent recipeDetailIntent = new Intent(mContext,DetailRecipeActivity.class);
-//                mContext.startActivity(recipeDetailIntent);
+                Intent recipeDetailIntent = new Intent(mContext,DetailRecipeActivity.class);
+                recipeDetailIntent.putExtra("recipeDetails",currentRecipe);
+                mContext.startActivity(recipeDetailIntent);
             }
         });
 
