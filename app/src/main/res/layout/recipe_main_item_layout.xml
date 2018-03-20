@@ -15,7 +15,6 @@
         app:cardUseCompatPadding="true">
         <!--card_view:cardElevation="@dimen/cardview_default_elevation"-->
 
-
     <TextView
         android:id="@+id/recipeTitle"
         android:layout_width="match_parent"
