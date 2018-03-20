@@ -6,70 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/stepDetailFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
-        android:id="@+id/playerView"
-        android:visibility="invisible"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        app:resize_mode="fill">
-
-    </com.google.android.exoplayer2.ui.SimpleExoPlayerView>
-
-     <TextView
-         android:id="@+id/noVideoErrorTextView"
-         android:layout_width="match_parent"
-         android:layout_height="0dp"
-         android:layout_weight="1"
-         android:layout_gravity="center"
-         android:textAlignment="center"
-         android:textStyle="bold"
-         android:textSize="16sp"
-         android:text="No Video Available"
-         android:visibility="gone"/>
-
-        <TextView
-            android:layout_margin="8dp"
-            tools:text="this is a sample text"
-            android:layout_gravity="center"
-            android:id="@+id/stepDescription"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1.2" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.4">
-
-            <Button
-                android:layout_margin="16dp"
-                android:id="@+id/previousStepButton"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentBottom="true"
-                android:layout_weight="1"
-                android:text="Previous Step" />
-
-
-            <Button
-                android:layout_margin="16dp"
-                android:id="@+id/nextStepButton"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentBottom="true"
-                android:layout_weight="1"
-                android:text="Next Step" />
-
-        </RelativeLayout>
-
-    </LinearLayout>
+        android:layout_height="match_parent">
+    </FrameLayout>
 
 </RelativeLayout>

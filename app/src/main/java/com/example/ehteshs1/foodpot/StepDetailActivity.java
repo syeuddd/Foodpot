@@ -206,7 +206,7 @@ public class StepDetailActivity extends AppCompatActivity {
     }
 
     private void test(){
-        
+
     }
 }
 
