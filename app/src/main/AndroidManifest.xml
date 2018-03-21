@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.ehteshs1.foodpot">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -18,9 +19,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DetailRecipeActivity" />
-        <activity android:name=".IngredientsListActivity" />
-        <activity android:name=".StepDetailActivity"></activity>
+
+        <activity android:name=".DetailRecipeActivity">
+        </activity>
+
+        <activity android:name=".IngredientsListActivity">
+        </activity>
+
+        <activity android:name=".StepDetailActivity">
+        </activity>
+
     </application>
 
 </manifest>

@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 
 import com.example.ehteshs1.foodpot.model.Ingredient;
 
@@ -19,6 +20,10 @@ public class IngredientsListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ingredients_list);
+
+        if(getSupportActionBar()!=null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         RecyclerView ingredientRecyclerView = findViewById(R.id.ingredientRecyclerView);
 
@@ -40,4 +45,16 @@ public class IngredientsListActivity extends AppCompatActivity {
 
         setTitle("Ingredient List");
     }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int mItem = item.getItemId();
+        switch (mItem){
+            case android.R.id.home:
+                finish();
+        }
+        return true;
+    }
+
 }

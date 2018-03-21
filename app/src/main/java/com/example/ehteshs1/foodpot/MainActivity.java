@@ -1,11 +1,18 @@
 package com.example.ehteshs1.foodpot;
 
+import android.content.Context;
+import android.content.res.Configuration;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import com.example.ehteshs1.foodpot.Utils.NetworkUtils;
 import com.example.ehteshs1.foodpot.controller.FetchRecipes;
 import com.example.ehteshs1.foodpot.model.Recipy;
 import com.example.ehteshs1.foodpot.network.ApiService;
@@ -31,7 +38,16 @@ public class MainActivity extends AppCompatActivity implements FetchRecipes.Fetc
 
         adapter = new MainViewRecipeAdapter(this);
 
-        LinearLayoutManager manager = new LinearLayoutManager(this);
+
+       // LinearLayoutManager manager = new LinearLayoutManager(this);
+
+        StaggeredGridLayoutManager manager;
+
+        if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+            manager = new StaggeredGridLayoutManager(3,StaggeredGridLayoutManager.VERTICAL);
+        }else {
+            manager = new StaggeredGridLayoutManager(1,StaggeredGridLayoutManager.VERTICAL);
+        }
 
         recipleTitleRecyclerView.setLayoutManager(manager);
 
@@ -45,13 +61,20 @@ public class MainActivity extends AppCompatActivity implements FetchRecipes.Fetc
 
         RetrofitClient retrofitClient = new RetrofitClient(this);
 
-        ApiService service = retrofitClient.getRetrofitClient(baseUrl).create(ApiService.class);
+        if (isDevicedConnected() && NetworkUtils.isConnected()){
 
-        retrofit2.Call<List<Recipy>> call = service.getRecipes();
+            ApiService service = retrofitClient.getRetrofitClient(baseUrl).create(ApiService.class);
 
-        FetchRecipes task = new FetchRecipes(this);
+            retrofit2.Call<List<Recipy>> call = service.getRecipes();
 
-        call.enqueue(task);
+            FetchRecipes task = new FetchRecipes(this);
+
+            call.enqueue(task);
+        }else {
+            Toast.makeText(this,"Device not connected to internet",Toast.LENGTH_SHORT).show();
+        }
+
+
 
     }
 
@@ -63,5 +86,14 @@ public class MainActivity extends AppCompatActivity implements FetchRecipes.Fetc
 
         adapter.setData(recipies);
 
+    }
+
+    private Boolean isDevicedConnected(){
+
+        ConnectivityManager cm = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 }

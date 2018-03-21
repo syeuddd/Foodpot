@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
 import com.example.ehteshs1.foodpot.DetailRecipeViewAdapter.OnStepClickListener;
 import com.example.ehteshs1.foodpot.model.Ingredient;
@@ -26,7 +28,12 @@ public class DetailRecipeActivity extends AppCompatActivity implements OnStepCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_recipe);
 
+        if(getSupportActionBar()!=null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         Intent intent = getIntent();
+
         mRecipy = intent.getParcelableExtra("recipeDetails");
         mIngredients = (ArrayList<Ingredient>) mRecipy.getIngredients();
         mRecipeSteps = (ArrayList<Step>) mRecipy.getSteps();
@@ -42,7 +49,15 @@ public class DetailRecipeActivity extends AppCompatActivity implements OnStepCli
 
     }
 
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int mItem = item.getItemId();
+        switch (mItem){
+            case android.R.id.home:
+                finish();
+        }
+        return true;
+    }
 
     @Override
     public void stepSelected(int position) {
@@ -83,6 +98,7 @@ public class DetailRecipeActivity extends AppCompatActivity implements OnStepCli
                 .replace(R.id.stepDetailFragment,recipeStepFragment)
                 .commit();
     }
+
 
     private void initializeRecipeDetailsFragment() {
         Bundle recipeBundle = new Bundle();

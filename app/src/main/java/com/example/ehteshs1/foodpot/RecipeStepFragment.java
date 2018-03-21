@@ -107,10 +107,23 @@ public class RecipeStepFragment extends Fragment {
 
         player.setVideoScalingMode(C.VIDEO_SCALING_MODE_SCALE_TO_FIT);
 
+
+
         if (currentStepList != null) {
             Step currentStep = currentStepList.get(counter);
+            String url="";
+                if (currentStep.getVideoURL().isEmpty()){
+
+                    if (!currentStep.getThumbnailURL().isEmpty()){
+
+                        url = currentStep.getThumbnailURL();
+                    }
+                }else {
+                    url = currentStep.getVideoURL();
+                }
             recipeDescription.setText(currentStep.getDescription());
-            changeVideo(currentStepList.get(counter).getVideoURL());
+
+            changeVideo(url);
         }
 
         if (!tabletLayout) {

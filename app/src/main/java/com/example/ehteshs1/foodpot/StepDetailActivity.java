@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.ehteshs1.foodpot.model.Step;
@@ -41,6 +42,10 @@ public class StepDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step_detail);
+
+        if(getSupportActionBar()!=null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         Intent stepDetailsIntent = getIntent();
 
@@ -156,6 +161,16 @@ public class StepDetailActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int mItem = item.getItemId();
+        switch (mItem){
+            case android.R.id.home:
+                finish();
+        }
+        return true;
+    }
+
 //    private void changeVideo(String url) {
 //
 //        if (!url.isEmpty() && player !=null && recipeView !=null){
@@ -208,6 +223,8 @@ public class StepDetailActivity extends AppCompatActivity {
 //        super.onDestroy();
 //        releasePlayer();
 //    }
+
+
 
 }
 
