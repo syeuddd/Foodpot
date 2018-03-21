@@ -57,6 +57,7 @@ public class RecipeStepFragment extends Fragment {
     Button nextButton;
     Button previousButton;
     Context mContext;
+    private boolean tabletLayout;
 
     public RecipeStepFragment() {
 
@@ -68,22 +69,26 @@ public class RecipeStepFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.step_detail_fragment_layout, container, false);
 
+        if (rootView.findViewById(R.id.tabletLayout) != null) {
+
+            tabletLayout = true;
+
+        } else {
+            nextButton = rootView.findViewById(R.id.nextStepButton);
+            previousButton = rootView.findViewById(R.id.previousStepButton);
+        }
+
         Bundle data = getArguments();
 
         currentStepList = data.getParcelableArrayList("stepList");
         counter = data.getInt("counter");
-
-
         recipeDescription = rootView.findViewById(R.id.stepDescription);
-        nextButton = rootView.findViewById(R.id.nextStepButton);
-        previousButton = rootView.findViewById(R.id.previousStepButton);
         errorTextView = rootView.findViewById(R.id.noVideoErrorTextView);
         recipeView = rootView.findViewById(R.id.playerView);
 
-        if (getActivity()!=null){
+        if (getActivity() != null) {
             mContext = getActivity();
         }
-
 
 
         bandwidthMeter = new DefaultBandwidthMeter();
@@ -108,6 +113,8 @@ public class RecipeStepFragment extends Fragment {
             changeVideo(currentStepList.get(counter).getVideoURL());
         }
 
+        if (!tabletLayout) {
+
 
         if (counter == 0) {
             previousButton.setVisibility(View.INVISIBLE);
@@ -117,7 +124,6 @@ public class RecipeStepFragment extends Fragment {
 
             nextButton.setVisibility(View.INVISIBLE);
         }
-
 
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,6 +171,7 @@ public class RecipeStepFragment extends Fragment {
                 }
             }
         });
+    }
 
 
         return rootView;

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/tabletLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+            android:id="@+id/playerView"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:visibility="gone"
+            app:resize_mode="fill">
+
+        </com.google.android.exoplayer2.ui.SimpleExoPlayerView>
+
+        <TextView
+            android:id="@+id/noVideoErrorTextView"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:gravity="center"
+            android:text="No Video Available"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:visibility="gone"/>
+
+
+        <TextView
+            android:id="@+id/stepDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/playerView"
+            android:layout_gravity="center"
+            android:layout_margin="16dp"
+            android:layout_weight="1.2"
+            android:textSize="24sp"
+            tools:text="this is a sample text"/>
+
+    </LinearLayout>
+</ScrollView>
