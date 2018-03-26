@@ -6,7 +6,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.widget.ProgressBar;
@@ -21,6 +20,8 @@ import com.example.ehteshs1.foodpot.network.RetrofitClient;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements FetchRecipes.FetchRecipeInterface{
@@ -29,17 +30,18 @@ public class MainActivity extends AppCompatActivity implements FetchRecipes.Fetc
     MainViewRecipeAdapter adapter;
     ArrayList<Recipy> recipies;
 
+    @BindView(R.id.recipeListrecyclerView) RecyclerView recipeRecyclerView;
+    @BindView(R.id.progressBar) ProgressBar bar;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RecyclerView recipleTitleRecyclerView = findViewById(R.id.recyclerView);
+        ButterKnife.bind(this);
 
         adapter = new MainViewRecipeAdapter(this);
-
-
-       // LinearLayoutManager manager = new LinearLayoutManager(this);
 
         StaggeredGridLayoutManager manager;
 
@@ -49,15 +51,14 @@ public class MainActivity extends AppCompatActivity implements FetchRecipes.Fetc
             manager = new StaggeredGridLayoutManager(1,StaggeredGridLayoutManager.VERTICAL);
         }
 
-        recipleTitleRecyclerView.setLayoutManager(manager);
 
-        recipleTitleRecyclerView.setAdapter(adapter);
+        recipeRecyclerView.setLayoutManager(manager);
+
+        recipeRecyclerView.setAdapter(adapter);
 
         String baseUrl = "https://d17h27t6h515a5.cloudfront.net";
 
         recipies = new ArrayList<>();
-
-        ProgressBar bar = findViewById(R.id.progressBar);
 
         RetrofitClient retrofitClient = new RetrofitClient(this);
 
@@ -73,8 +74,6 @@ public class MainActivity extends AppCompatActivity implements FetchRecipes.Fetc
         }else {
             Toast.makeText(this,"Device not connected to internet",Toast.LENGTH_SHORT).show();
         }
-
-
 
     }
 
@@ -96,4 +95,5 @@ public class MainActivity extends AppCompatActivity implements FetchRecipes.Fetc
 
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
+
 }

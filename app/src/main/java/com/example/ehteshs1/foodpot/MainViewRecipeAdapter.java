@@ -13,6 +13,9 @@ import com.example.ehteshs1.foodpot.model.Recipy;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MainViewRecipeAdapter extends RecyclerView.Adapter<MainViewRecipeAdapter.MyViewHolder>{
 
     private ArrayList<Recipy> recipyArrayList;
@@ -68,12 +71,14 @@ public class MainViewRecipeAdapter extends RecyclerView.Adapter<MainViewRecipeAd
 
     class MyViewHolder extends RecyclerView.ViewHolder{
 
-        TextView recipeTitle;
+        @BindView(R.id.recipeTitle) TextView recipeTitle;
+
+
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
-            recipeTitle = itemView.findViewById(R.id.recipeTitle);
+            ButterKnife.bind(this,itemView);
         }
 
     }

@@ -16,6 +16,9 @@ import com.example.ehteshs1.foodpot.model.Step;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class IngredientListViewAdapter extends RecyclerView.Adapter<IngredientListViewAdapter.MyViewHolder>{
 
     private ArrayList<Ingredient> ingredientList;
@@ -100,16 +103,15 @@ public class IngredientListViewAdapter extends RecyclerView.Adapter<IngredientLi
 
     class MyViewHolder extends RecyclerView.ViewHolder{
 
-        TextView ingredientName;
-        TextView ingredientQuantity;
-        TextView ingredientMeasure;
+        @BindView(R.id.ingredientName) TextView ingredientName;
+        @BindView(R.id.ingredientQuantity) TextView ingredientQuantity;
+        @BindView(R.id.ingredientMeasure) TextView ingredientMeasure;
+
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
-            ingredientName = itemView.findViewById(R.id.ingredientName);
-            ingredientQuantity = itemView.findViewById(R.id.ingredientQuantity);
-            ingredientMeasure = itemView.findViewById(R.id.ingredientMeasure);
+            ButterKnife.bind(this,itemView);
         }
 
     }

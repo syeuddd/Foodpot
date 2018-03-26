@@ -1,7 +1,6 @@
 package com.example.ehteshs1.foodpot;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,6 +14,9 @@ import com.example.ehteshs1.foodpot.model.Step;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class DetailRecipeViewAdapter extends RecyclerView.Adapter<DetailRecipeViewAdapter.MyViewHolder> {
 
     private ArrayList<Ingredient> ingredientList;
@@ -24,7 +26,6 @@ public class DetailRecipeViewAdapter extends RecyclerView.Adapter<DetailRecipeVi
     private boolean isTextViewClicked = false;
 
     private Context mContext;
-
 
     private OnStepClickListener mOnStepClickListener;
 
@@ -84,22 +85,7 @@ public class DetailRecipeViewAdapter extends RecyclerView.Adapter<DetailRecipeVi
             @Override
             public void onClick(View view) {
 
-
                 mOnStepClickListener.stepSelected(position);
-
-
-//                if (position == 0) {
-//                    Intent ingredientIntent = new Intent(mContext, IngredientsListActivity.class);
-//                    ingredientIntent.putParcelableArrayListExtra("ingredientList", ingredientList);
-//                    mContext.startActivity(ingredientIntent);
-//
-//                } else {
-//                    Intent detailStepIntent = new Intent(mContext, StepDetailActivity.class);
-//                    detailStepIntent.putParcelableArrayListExtra("stepDetails", recipeSteps);
-//                    detailStepIntent.putExtra("currentPosition", position-1);
-//                    mContext.startActivity(detailStepIntent);
-//                }
-
             }
         });
 
@@ -116,14 +102,14 @@ public class DetailRecipeViewAdapter extends RecyclerView.Adapter<DetailRecipeVi
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView recipeDetails;
-        CardView mCardView;
+        @BindView(R.id.recipe) TextView recipeDetails;
+        @BindView(R.id.card_view) CardView mCardView;
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
-            recipeDetails = itemView.findViewById(R.id.recipe);
-            mCardView = itemView.findViewById(R.id.card_view);
+            ButterKnife.bind(this,itemView);
+
         }
 
     }

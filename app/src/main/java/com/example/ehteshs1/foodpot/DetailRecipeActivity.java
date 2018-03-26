@@ -35,7 +35,9 @@ public class DetailRecipeActivity extends AppCompatActivity implements OnStepCli
         Intent intent = getIntent();
 
         mRecipy = intent.getParcelableExtra("recipeDetails");
+
         mIngredients = (ArrayList<Ingredient>) mRecipy.getIngredients();
+
         mRecipeSteps = (ArrayList<Step>) mRecipy.getSteps();
 
         if (findViewById(R.id.twoPaneLayout)!=null){
@@ -79,7 +81,6 @@ public class DetailRecipeActivity extends AppCompatActivity implements OnStepCli
             initializeStepFragment(position);
 
         }
-
 
     }
 

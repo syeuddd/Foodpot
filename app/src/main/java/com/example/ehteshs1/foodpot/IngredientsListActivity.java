@@ -11,21 +11,27 @@ import com.example.ehteshs1.foodpot.model.Ingredient;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class IngredientsListActivity extends AppCompatActivity {
 
     IngredientListViewAdapter adapter;
     ArrayList<Ingredient> ingredientArrayList;
+    @BindView(R.id.ingredientRecyclerView) RecyclerView ingredientRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ingredients_list);
 
+        ButterKnife.bind(this);
+
         if(getSupportActionBar()!=null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        RecyclerView ingredientRecyclerView = findViewById(R.id.ingredientRecyclerView);
+        ingredientRecyclerView = findViewById(R.id.ingredientRecyclerView);
 
         adapter = new IngredientListViewAdapter(this);
 

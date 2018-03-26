@@ -33,6 +33,9 @@ import com.google.android.exoplayer2.util.Util;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by syedehteshamuddin on 2018-03-19.
  */
@@ -42,7 +45,7 @@ public class RecipeStepFragment extends Fragment {
 
     ArrayList<Step> currentStepList;
     int counter = 0;
-    TextView recipeDescription;
+
     SimpleExoPlayer player;
     BandwidthMeter bandwidthMeter;
     ExtractorsFactory extractorsFactory;
@@ -52,14 +55,17 @@ public class RecipeStepFragment extends Fragment {
     DataSource.Factory dataSourceFactory;
     MediaSource mediaSource;
     String videoUrl;
-    SimpleExoPlayerView recipeView;
-    TextView errorTextView;
-    Button nextButton;
-    Button previousButton;
     Context mContext;
     private boolean tabletLayout;
 
+    @BindView(R.id.playerView) SimpleExoPlayerView recipeView;
+    @BindView(R.id.noVideoErrorTextView) TextView errorTextView;
+    @BindView(R.id.stepDescription) TextView recipeDescription;
+    @BindView(R.id.nextStepButton) Button nextButton;
+    @BindView(R.id.previousStepButton) Button previousButton;
+
     public RecipeStepFragment() {
+
 
     }
 
@@ -69,22 +75,21 @@ public class RecipeStepFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.step_detail_fragment_layout, container, false);
 
+        ButterKnife.bind(this,rootView);
+
         if (rootView.findViewById(R.id.tabletLayout) != null) {
 
             tabletLayout = true;
 
         } else {
-            nextButton = rootView.findViewById(R.id.nextStepButton);
-            previousButton = rootView.findViewById(R.id.previousStepButton);
+            nextButton.setVisibility(View.VISIBLE);
+            previousButton.setVisibility(View.VISIBLE);
         }
 
         Bundle data = getArguments();
 
         currentStepList = data.getParcelableArrayList("stepList");
         counter = data.getInt("counter");
-        recipeDescription = rootView.findViewById(R.id.stepDescription);
-        errorTextView = rootView.findViewById(R.id.noVideoErrorTextView);
-        recipeView = rootView.findViewById(R.id.playerView);
 
         if (getActivity() != null) {
             mContext = getActivity();
@@ -137,6 +142,7 @@ public class RecipeStepFragment extends Fragment {
 
             nextButton.setVisibility(View.INVISIBLE);
         }
+
 
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -12,6 +12,10 @@ import android.view.ViewGroup;
 
 import com.example.ehteshs1.foodpot.model.Recipy;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 /**
  * Created by ehteshs1 on 2018/03/20.
  */
@@ -21,6 +25,8 @@ public class DetailRecipeFragment extends Fragment {
 
     DetailRecipeViewAdapter adapter;
     Recipy mRecipy;
+    Unbinder mUnbinder;
+    @BindView(R.id.recipeDetailViewRecyclerView) RecyclerView detailFragmentRecyclerView;
 
     public DetailRecipeFragment(){
 
@@ -33,10 +39,11 @@ public class DetailRecipeFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.detail_recipe_fragement, container, false);
 
+        mUnbinder = ButterKnife.bind(this,rootView);
+
         Context mContext = getActivity();
 
-
-        RecyclerView recipleDetailRecyclerView = rootView.findViewById(R.id.recipeDetailViewRecyclerView);
+        RecyclerView recipleDetailRecyclerView = detailFragmentRecyclerView;
 
         adapter = new DetailRecipeViewAdapter(mContext);
 
@@ -52,9 +59,14 @@ public class DetailRecipeFragment extends Fragment {
         if (mRecipy != null){
             adapter.setData(mRecipy);
         }
-
         return rootView;
+    }
 
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mUnbinder.unbind();
     }
 }
 
