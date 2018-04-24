@@ -30,6 +30,16 @@ public class Recipy implements android.os.Parcelable {
     @Expose
     private String image;
 
+    private static Recipy instance;
+
+    public static Recipy getInstance(){
+        if (instance == null){
+            instance = new Recipy();
+        }
+
+        return instance;
+    }
+
     public int getId() {
         return id;
     }

@@ -2,6 +2,8 @@ package com.example.ehteshs1.foodpot;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +11,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ehteshs1.foodpot.model.Ingredient;
 import com.example.ehteshs1.foodpot.model.Recipy;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -20,10 +24,16 @@ public class MainViewRecipeAdapter extends RecyclerView.Adapter<MainViewRecipeAd
 
     private ArrayList<Recipy> recipyArrayList;
     private Context mContext;
+    private SharedPreferences sharedPrefs;
+    private Gson gson;
+    private SharedPreferences.Editor editor;
+    private Ingredient ingredientList;
 
 
     public MainViewRecipeAdapter(Context context){
+
         mContext = context;
+        gson =new Gson();
     }
 
     public void setData(ArrayList<Recipy> recipies){
@@ -56,8 +66,26 @@ public class MainViewRecipeAdapter extends RecyclerView.Adapter<MainViewRecipeAd
                 Intent recipeDetailIntent = new Intent(mContext,DetailRecipeActivity.class);
                 recipeDetailIntent.putExtra("recipeDetails",currentRecipe);
                 mContext.startActivity(recipeDetailIntent);
+                storeIngredientsList(currentRecipe);
             }
         });
+
+    }
+
+    private void storeIngredientsList(Recipy mCurrentRecipy) {
+
+        Recipy storeRecipy = Recipy.getInstance();
+        storeRecipy = mCurrentRecipy;
+        String IgredientJSon = gson.toJson(storeRecipy);
+        sharedPrefs =  PreferenceManager.getDefaultSharedPreferences(mContext);
+        //Clear exsiting stuff
+        editor = sharedPrefs.edit();
+        editor.clear();
+        editor.apply();
+        // add new stuff
+        editor.putString("ingredientInfo", IgredientJSon);
+
+        editor.commit();
 
     }
 

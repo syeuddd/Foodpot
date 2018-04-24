@@ -1,13 +1,18 @@
 package com.example.ehteshs1.foodpot;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.ehteshs1.foodpot.model.Ingredient;
+import com.example.ehteshs1.foodpot.model.Recipy;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -19,6 +24,8 @@ public class IngredientsListActivity extends AppCompatActivity {
     IngredientListViewAdapter adapter;
     ArrayList<Ingredient> ingredientArrayList;
     @BindView(R.id.ingredientRecyclerView) RecyclerView ingredientRecyclerView;
+    private SharedPreferences sharedPrefs;
+    private Gson gson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +37,9 @@ public class IngredientsListActivity extends AppCompatActivity {
         if(getSupportActionBar()!=null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
+        gson = new Gson();
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         ingredientRecyclerView = findViewById(R.id.ingredientRecyclerView);
 
@@ -43,27 +53,43 @@ public class IngredientsListActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
+            boolean loadedFromWidget = intent.getBooleanExtra("loadedFromwidget",false);
 
-
-        ingredientArrayList = intent.getParcelableArrayListExtra("ingredientList");
-
-        if (ingredientArrayList != null){
-            adapter.setData(ingredientArrayList);
-        }else {
-
-            loadIngredientsFromLocalStorage();
-
-
-        }
+            if (loadedFromWidget){
+                if(loadIngredientsFromLocalStorage()){
+                    adapter.setData(ingredientArrayList);
+                }
+            }
+            ingredientArrayList = intent.getParcelableArrayListExtra("ingredientList");
+            if (ingredientArrayList!=null){
+                adapter.setData(ingredientArrayList);
+            }
 
         setTitle("Ingredient List");
     }
 
 
-    private void loadIngredientsFromLocalStorage(){
+    private Boolean loadIngredientsFromLocalStorage(){
 
-        //load data from shared preference
+        String jSon = sharedPrefs.getString("ingredientInfo", "");
 
+        if (!jSon.equals("")){
+
+            Recipy storedIngredientList = gson.fromJson(jSon, Recipy.class);
+
+            ingredientArrayList = (ArrayList<Ingredient>) storedIngredientList.getIngredients();
+
+            if (ingredientArrayList!=null){
+                if(ingredientArrayList.size()>0){
+                    return true;
+                }
+
+            }
+
+        }
+
+       // Toast.makeText(this,"App has been launched from widget",Toast.LENGTH_SHORT).show();
+        return false;
     }
 
 

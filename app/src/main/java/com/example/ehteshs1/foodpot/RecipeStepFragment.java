@@ -66,7 +66,6 @@ public class RecipeStepFragment extends Fragment {
 
     public RecipeStepFragment() {
 
-
     }
 
     @Nullable

@@ -21,7 +21,8 @@ public class IgredientsListWidget extends AppWidgetProvider {
 
         views.setTextViewText(R.id.appwidget_text, widgetText);
 
-        Intent widgetActivity = new Intent(context,MainActivity.class);
+        Intent widgetActivity = new Intent(context,IngredientsListActivity.class);
+        widgetActivity.putExtra("loadedFromwidget",true);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context,0,widgetActivity,PendingIntent.FLAG_UPDATE_CURRENT);
 

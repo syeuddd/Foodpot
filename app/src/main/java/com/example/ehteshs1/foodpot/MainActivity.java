@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements FetchRecipes.Fetc
 
         RetrofitClient retrofitClient = new RetrofitClient(this);
 
-        if (isDevicedConnected() && NetworkUtils.isConnected()){
+        if (isDevicedConnected()){
 
             ApiService service = retrofitClient.getRetrofitClient(baseUrl).create(ApiService.class);
 
