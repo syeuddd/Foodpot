@@ -43,13 +43,27 @@ public class IngredientsListActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
+
+
         ingredientArrayList = intent.getParcelableArrayListExtra("ingredientList");
 
         if (ingredientArrayList != null){
             adapter.setData(ingredientArrayList);
+        }else {
+
+            loadIngredientsFromLocalStorage();
+
+
         }
 
         setTitle("Ingredient List");
+    }
+
+
+    private void loadIngredientsFromLocalStorage(){
+
+        //load data from shared preference
+
     }
 
 
