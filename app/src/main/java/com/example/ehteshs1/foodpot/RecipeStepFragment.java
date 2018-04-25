@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.ehteshs1.foodpot.model.Step;
@@ -30,6 +31,7 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -55,6 +57,7 @@ public class RecipeStepFragment extends Fragment {
     DataSource.Factory dataSourceFactory;
     MediaSource mediaSource;
     String videoUrl;
+    String thumbNailUrl;
     Context mContext;
     private boolean tabletLayout;
 
@@ -63,6 +66,7 @@ public class RecipeStepFragment extends Fragment {
     @BindView(R.id.stepDescription) TextView recipeDescription;
     @BindView(R.id.nextStepButton) Button nextButton;
     @BindView(R.id.previousStepButton) Button previousButton;
+    @BindView(R.id.thumbNailView) ImageView thumbNailImageView;
 
     public RecipeStepFragment() {
 
@@ -112,22 +116,13 @@ public class RecipeStepFragment extends Fragment {
         player.setVideoScalingMode(C.VIDEO_SCALING_MODE_SCALE_TO_FIT);
 
 
-
+        thumbNailUrl = "";
         if (currentStepList != null) {
             Step currentStep = currentStepList.get(counter);
-            String url="";
-                if (currentStep.getVideoURL().isEmpty()){
-
-                    if (!currentStep.getThumbnailURL().isEmpty()){
-
-                        url = currentStep.getThumbnailURL();
-                    }
-                }else {
-                    url = currentStep.getVideoURL();
-                }
+            videoUrl = currentStep.getVideoURL();
             recipeDescription.setText(currentStep.getDescription());
 
-            changeVideo(url);
+            changeVideo(videoUrl, thumbNailUrl);
         }
 
         if (!tabletLayout) {
@@ -155,7 +150,7 @@ public class RecipeStepFragment extends Fragment {
                         }
                         recipeDescription.setText(currentStepList.get(counter).getDescription());
                         player.setPlayWhenReady(false);
-                        changeVideo(currentStepList.get(counter).getVideoURL());
+                        changeVideo(currentStepList.get(counter).getVideoURL(), currentStepList.get(counter).getThumbnailURL());
 
                     } else {
                         nextButton.setVisibility(View.INVISIBLE);
@@ -179,7 +174,7 @@ public class RecipeStepFragment extends Fragment {
                     if (counter < currentStepList.size() - 1) {
                         recipeDescription.setText(currentStepList.get(counter).getDescription());
                         player.setPlayWhenReady(false);
-                        changeVideo(currentStepList.get(counter).getVideoURL());
+                        changeVideo(currentStepList.get(counter).getVideoURL(), currentStepList.get(counter).getThumbnailURL());
                         if (nextButton.getVisibility() == View.INVISIBLE) {
                             nextButton.setVisibility(View.VISIBLE);
                         }
@@ -198,11 +193,11 @@ public class RecipeStepFragment extends Fragment {
     }
 
 
-    private void changeVideo(String url) {
+    private void changeVideo(String videoUrl, String thumbNailUrl) {
 
-        if (!url.isEmpty() && player != null && recipeView != null) {
+        if (!videoUrl.isEmpty() && player != null && recipeView != null) {
 
-            mediaSource = new ExtractorMediaSource(Uri.parse(url), dataSourceFactory, extractorsFactory, null, null);
+            mediaSource = new ExtractorMediaSource(Uri.parse(videoUrl), dataSourceFactory, extractorsFactory, null, null);
 
             player.prepare(mediaSource);
             player.setPlayWhenReady(true);
@@ -212,10 +207,22 @@ public class RecipeStepFragment extends Fragment {
 
             recipeView.setVisibility(View.VISIBLE);
             errorTextView.setVisibility(View.GONE);
+            thumbNailImageView.setVisibility(View.GONE);
 
-        } else {
+        } else if (!thumbNailUrl.isEmpty()){
 
+                    thumbNailImageView.setVisibility(View.VISIBLE);
+                    recipeView.setVisibility(View.GONE);
+                    errorTextView.setVisibility(View.GONE);
+
+                    Picasso.get()
+                            .load(thumbNailUrl)
+                            .centerCrop()
+                            .into(thumbNailImageView);
+            
+        }else {
             recipeView.setVisibility(View.GONE);
+            thumbNailImageView.setVisibility(View.GONE);
             errorTextView.setVisibility(View.VISIBLE);
         }
 

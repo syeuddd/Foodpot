@@ -68,6 +68,7 @@ public class DetailRecipeActivity extends AppCompatActivity implements OnStepCli
             if (position == 0) {
                 Intent ingredientIntent = new Intent(this, IngredientsListActivity.class);
                 ingredientIntent.putParcelableArrayListExtra("ingredientList", mIngredients);
+                ingredientIntent.putExtra("recipeName",mRecipy.getName());
                 startActivity(ingredientIntent);
 
             } else {

@@ -26,6 +26,7 @@ public class IngredientsListActivity extends AppCompatActivity {
     @BindView(R.id.ingredientRecyclerView) RecyclerView ingredientRecyclerView;
     private SharedPreferences sharedPrefs;
     private Gson gson;
+    private String recipeName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +54,12 @@ public class IngredientsListActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
+            recipeName = intent.getStringExtra("recipeName");
+            if (recipeName != null){
+                if (!recipeName.isEmpty())
+                    setTitle(recipeName);
+            }
+
             boolean loadedFromWidget = intent.getBooleanExtra("loadedFromwidget",false);
 
             if (loadedFromWidget){
@@ -65,7 +72,6 @@ public class IngredientsListActivity extends AppCompatActivity {
                 adapter.setData(ingredientArrayList);
             }
 
-        setTitle("Ingredient List");
     }
 
 
@@ -78,6 +84,9 @@ public class IngredientsListActivity extends AppCompatActivity {
             Recipy storedIngredientList = gson.fromJson(jSon, Recipy.class);
 
             ingredientArrayList = (ArrayList<Ingredient>) storedIngredientList.getIngredients();
+            recipeName = storedIngredientList.getName();
+
+            setTitle(recipeName);
 
             if (ingredientArrayList!=null){
                 if(ingredientArrayList.size()>0){
