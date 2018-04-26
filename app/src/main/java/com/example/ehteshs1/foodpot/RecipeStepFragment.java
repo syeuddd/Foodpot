@@ -57,7 +57,6 @@ public class RecipeStepFragment extends Fragment {
     DataSource.Factory dataSourceFactory;
     MediaSource mediaSource;
     String videoUrl;
-    String thumbNailUrl;
     Context mContext;
     private boolean tabletLayout;
 
@@ -66,9 +65,9 @@ public class RecipeStepFragment extends Fragment {
     @BindView(R.id.stepDescription) TextView recipeDescription;
     @BindView(R.id.nextStepButton) Button nextButton;
     @BindView(R.id.previousStepButton) Button previousButton;
-    @BindView(R.id.thumbNailView) ImageView thumbNailImageView;
 
     public RecipeStepFragment() {
+
 
     }
 
@@ -116,75 +115,100 @@ public class RecipeStepFragment extends Fragment {
         player.setVideoScalingMode(C.VIDEO_SCALING_MODE_SCALE_TO_FIT);
 
 
-        thumbNailUrl = "";
+
         if (currentStepList != null) {
             Step currentStep = currentStepList.get(counter);
-            videoUrl = currentStep.getVideoURL();
+            String url="";
+            if (currentStep.getVideoURL().isEmpty()){
+
+                if (!currentStep.getThumbnailURL().isEmpty()){
+
+                    url = currentStep.getThumbnailURL();
+                }
+            }else {
+                url = currentStep.getVideoURL();
+            }
             recipeDescription.setText(currentStep.getDescription());
 
-            changeVideo(videoUrl, thumbNailUrl);
+            changeVideo(url);
         }
 
         if (!tabletLayout) {
 
 
-        if (counter == 0) {
-            previousButton.setVisibility(View.INVISIBLE);
-        }
-
-        if ((counter + 1) == currentStepList.size()) {
-
-            nextButton.setVisibility(View.INVISIBLE);
-        }
-
-
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (counter >= 0 && counter <= currentStepList.size()) {
-                    counter++;
-                    if (counter < currentStepList.size() - 1) {
-                        if (previousButton.getVisibility() == View.INVISIBLE) {
-                            previousButton.setVisibility(View.VISIBLE);
-                        }
-                        recipeDescription.setText(currentStepList.get(counter).getDescription());
-                        player.setPlayWhenReady(false);
-                        changeVideo(currentStepList.get(counter).getVideoURL(), currentStepList.get(counter).getThumbnailURL());
-
-                    } else {
-                        nextButton.setVisibility(View.INVISIBLE);
-                    }
-
-                }
+            if (counter == 0) {
+                previousButton.setVisibility(View.INVISIBLE);
             }
-        });
 
-        previousButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            if ((counter + 1) == currentStepList.size()) {
 
-                if (counter > 0 && counter <= currentStepList.size()) {
-                    counter--;
+                nextButton.setVisibility(View.INVISIBLE);
+            }
 
-                    if (counter == 0) {
-                        previousButton.setVisibility(View.INVISIBLE);
-                    }
 
-                    if (counter < currentStepList.size() - 1) {
-                        recipeDescription.setText(currentStepList.get(counter).getDescription());
-                        player.setPlayWhenReady(false);
-                        changeVideo(currentStepList.get(counter).getVideoURL(), currentStepList.get(counter).getThumbnailURL());
-                        if (nextButton.getVisibility() == View.INVISIBLE) {
-                            nextButton.setVisibility(View.VISIBLE);
+            nextButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if (counter >= 0 && counter <= currentStepList.size()) {
+
+                        counter++;
+
+                        if (counter < currentStepList.size()) {
+                            if (previousButton.getVisibility() == View.INVISIBLE) {
+                                previousButton.setVisibility(View.VISIBLE);
+                            }
+                            recipeDescription.setText(currentStepList.get(counter).getDescription());
+                            player.setPlayWhenReady(false);
+
+                            if (currentStepList.get(counter).getVideoURL().isEmpty()){
+                                changeVideo(currentStepList.get(counter).getThumbnailURL());
+                            }
+                            if(!currentStepList.get(counter).getVideoURL().isEmpty()){
+                                changeVideo(currentStepList.get(counter).getVideoURL());
+                            }
+
+                        } else {
+                            nextButton.setVisibility(View.INVISIBLE);
                         }
-                    } else {
-                        previousButton.setVisibility(View.INVISIBLE);
+
                     }
                 }
-            }
-        });
-    }
+            });
+
+            previousButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if (counter > 0 && counter <= currentStepList.size()) {
+                        counter--;
+
+                        if (counter == 0) {
+                            previousButton.setVisibility(View.INVISIBLE);
+                        }
+
+                        if (counter < currentStepList.size()) {
+                            recipeDescription.setText(currentStepList.get(counter).getDescription());
+                            player.setPlayWhenReady(false);
+
+                            if (currentStepList.get(counter).getVideoURL().isEmpty()){
+                                changeVideo(currentStepList.get(counter).getThumbnailURL());
+                            }
+
+                            else {
+                                changeVideo(currentStepList.get(counter).getVideoURL());
+                            }
+
+                            if (nextButton.getVisibility() == View.INVISIBLE) {
+                                nextButton.setVisibility(View.VISIBLE);
+                            }
+                        } else {
+                            previousButton.setVisibility(View.INVISIBLE);
+                        }
+                    }
+                }
+            });
+        }
 
 
         return rootView;
@@ -193,11 +217,11 @@ public class RecipeStepFragment extends Fragment {
     }
 
 
-    private void changeVideo(String videoUrl, String thumbNailUrl) {
+    private void changeVideo(String url) {
 
-        if (!videoUrl.isEmpty() && player != null && recipeView != null) {
+        if (!url.isEmpty() && player != null && recipeView != null) {
 
-            mediaSource = new ExtractorMediaSource(Uri.parse(videoUrl), dataSourceFactory, extractorsFactory, null, null);
+            mediaSource = new ExtractorMediaSource(Uri.parse(url), dataSourceFactory, extractorsFactory, null, null);
 
             player.prepare(mediaSource);
             player.setPlayWhenReady(true);
@@ -207,22 +231,10 @@ public class RecipeStepFragment extends Fragment {
 
             recipeView.setVisibility(View.VISIBLE);
             errorTextView.setVisibility(View.GONE);
-            thumbNailImageView.setVisibility(View.GONE);
 
-        } else if (!thumbNailUrl.isEmpty()){
+        } else {
 
-                    thumbNailImageView.setVisibility(View.VISIBLE);
-                    recipeView.setVisibility(View.GONE);
-                    errorTextView.setVisibility(View.GONE);
-
-                    Picasso.get()
-                            .load(thumbNailUrl)
-                            .centerCrop()
-                            .into(thumbNailImageView);
-            
-        }else {
             recipeView.setVisibility(View.GONE);
-            thumbNailImageView.setVisibility(View.GONE);
             errorTextView.setVisibility(View.VISIBLE);
         }
 
