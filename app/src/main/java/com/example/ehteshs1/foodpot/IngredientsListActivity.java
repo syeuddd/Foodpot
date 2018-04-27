@@ -21,9 +21,9 @@ import butterknife.ButterKnife;
 
 public class IngredientsListActivity extends AppCompatActivity {
 
-    IngredientListViewAdapter adapter;
-    ArrayList<Ingredient> ingredientArrayList;
-    @BindView(R.id.ingredientRecyclerView) RecyclerView ingredientRecyclerView;
+    private IngredientListViewAdapter adapter;
+    private ArrayList<Ingredient> ingredientArrayList;
+     @BindView(R.id.ingredientRecyclerView) RecyclerView ingredientRecyclerView;
     private SharedPreferences sharedPrefs;
     private Gson gson;
     private String recipeName;

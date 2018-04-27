@@ -5,9 +5,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-/**
- * Created by ehteshs1 on 2018/03/13.
- */
 
 public class ListOfRecipes {
     @SerializedName("recipies")

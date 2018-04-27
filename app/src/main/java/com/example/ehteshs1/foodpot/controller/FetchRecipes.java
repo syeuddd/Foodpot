@@ -9,9 +9,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * Created by ehteshs1 on 2018/03/13.
- */
 
 public class FetchRecipes implements Callback<List<Recipy>>{
 

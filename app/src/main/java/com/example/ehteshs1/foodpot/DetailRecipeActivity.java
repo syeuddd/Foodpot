@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.ehteshs1.foodpot.DetailRecipeViewAdapter.OnStepClickListener;
 import com.example.ehteshs1.foodpot.model.Ingredient;
@@ -17,8 +18,8 @@ import java.util.ArrayList;
 public class DetailRecipeActivity extends AppCompatActivity implements OnStepClickListener{
 
 
-    DetailRecipeViewAdapter adapter;
-    Recipy mRecipy;
+
+    private Recipy mRecipy;
     private boolean mTwoPane;
     private ArrayList<Ingredient> mIngredients;
     private ArrayList<Step> mRecipeSteps;
@@ -87,18 +88,27 @@ public class DetailRecipeActivity extends AppCompatActivity implements OnStepCli
 
     private void initializeStepFragment(int position) {
 
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList("stepList",mRecipeSteps);
-        bundle.putInt("counter",position);
+        if (position==0){
 
-        RecipeStepFragment recipeStepFragment = new RecipeStepFragment();
-        recipeStepFragment.setArguments(bundle);
+            Toast.makeText(this,"Ingredients",Toast.LENGTH_SHORT).show();
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        }else {
 
-        fragmentManager.beginTransaction()
-                .replace(R.id.stepDetailFragment,recipeStepFragment)
-                .commit();
+            Bundle bundle = new Bundle();
+            bundle.putParcelableArrayList("stepList",mRecipeSteps);
+            bundle.putInt("counter",position-1);
+
+            RecipeStepFragment recipeStepFragment = new RecipeStepFragment();
+            recipeStepFragment.setArguments(bundle);
+
+            FragmentManager fragmentManager = getSupportFragmentManager();
+
+            fragmentManager.beginTransaction()
+                    .replace(R.id.stepDetailFragment,recipeStepFragment)
+                    .commit();
+        }
+
+
     }
 
 

@@ -23,7 +23,6 @@ public class DetailRecipeViewAdapter extends RecyclerView.Adapter<DetailRecipeVi
     private ArrayList<Step> recipeSteps;
     private Recipy mSelectedRecipe;
     private String recipeStepDetails = "";
-    private boolean isTextViewClicked = false;
 
     private Context mContext;
 

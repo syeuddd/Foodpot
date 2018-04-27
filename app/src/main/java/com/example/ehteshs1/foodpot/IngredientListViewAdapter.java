@@ -23,7 +23,6 @@ public class IngredientListViewAdapter extends RecyclerView.Adapter<IngredientLi
 
     private ArrayList<Ingredient> ingredientList;
     private String recipeStepDetails="";
-    private boolean isTextViewClicked = false;
 
     private Context mContext;
 

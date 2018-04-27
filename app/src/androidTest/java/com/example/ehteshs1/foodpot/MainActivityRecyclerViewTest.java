@@ -15,15 +15,10 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
-/**
- * Created by syedehteshamuddin on 2018-03-24.
- */
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class MainActivityRecyclerViewTest {
-
-    private static final int RECIPE_POSITION = 1;
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class);

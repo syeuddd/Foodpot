@@ -16,15 +16,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-/**
- * Created by ehteshs1 on 2018/03/20.
- */
 
 public class DetailRecipeFragment extends Fragment {
 
 
-    DetailRecipeViewAdapter adapter;
-    Recipy mRecipy;
+    private DetailRecipeViewAdapter adapter;
+    private Recipy mRecipy;
     Unbinder mUnbinder;
     @BindView(R.id.recipeDetailViewRecyclerView) RecyclerView detailFragmentRecyclerView;
 

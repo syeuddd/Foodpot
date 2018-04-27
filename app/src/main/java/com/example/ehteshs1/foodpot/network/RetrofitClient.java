@@ -11,13 +11,10 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-/**
- * Created by ehteshs1 on 2018/03/13.
- */
 
 public class RetrofitClient {
 
-    Context mContext;
+    private Context mContext;
     public RetrofitClient(Context context){
         mContext = context;
     }

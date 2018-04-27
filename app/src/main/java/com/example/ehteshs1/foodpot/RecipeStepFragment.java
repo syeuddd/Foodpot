@@ -38,33 +38,29 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Created by syedehteshamuddin on 2018-03-19.
- */
 
 public class RecipeStepFragment extends Fragment {
 
 
-    ArrayList<Step> currentStepList;
-    int counter = 0;
+    private ArrayList<Step> currentStepList;
+    private int counter = 0;
 
-    SimpleExoPlayer player;
-    BandwidthMeter bandwidthMeter;
-    ExtractorsFactory extractorsFactory;
-    TrackSelection.Factory trackSelectionFactory;
-    TrackSelector trackSelector;
-    DefaultBandwidthMeter defaultBandwidthMeter;
-    DataSource.Factory dataSourceFactory;
-    MediaSource mediaSource;
-    String videoUrl;
-    Context mContext;
+    private SimpleExoPlayer player;
+    private BandwidthMeter bandwidthMeter;
+    private ExtractorsFactory extractorsFactory;
+    private TrackSelection.Factory trackSelectionFactory;
+    private TrackSelector trackSelector;
+    private DefaultBandwidthMeter defaultBandwidthMeter;
+    private DataSource.Factory dataSourceFactory;
+    private MediaSource mediaSource;
+    private Context mContext;
     private boolean tabletLayout;
 
-    @BindView(R.id.playerView) SimpleExoPlayerView recipeView;
-    @BindView(R.id.noVideoErrorTextView) TextView errorTextView;
-    @BindView(R.id.stepDescription) TextView recipeDescription;
-    @BindView(R.id.nextStepButton) Button nextButton;
-    @BindView(R.id.previousStepButton) Button previousButton;
+     @BindView(R.id.playerView) SimpleExoPlayerView recipeView;
+     @BindView(R.id.noVideoErrorTextView) TextView errorTextView;
+     @BindView(R.id.stepDescription) TextView recipeDescription;
+     @BindView(R.id.nextStepButton) Button nextButton;
+     @BindView(R.id.previousStepButton) Button previousButton;
 
     public RecipeStepFragment() {
 
@@ -117,6 +113,10 @@ public class RecipeStepFragment extends Fragment {
 
 
         if (currentStepList != null) {
+            if (counter>=0){
+
+            }
+
             Step currentStep = currentStepList.get(counter);
             String url="";
             if (currentStep.getVideoURL().isEmpty()){
@@ -151,10 +151,13 @@ public class RecipeStepFragment extends Fragment {
                 public void onClick(View view) {
 
                     if (counter >= 0 && counter <= currentStepList.size()) {
-
-                        counter++;
-
+                            counter++;
                         if (counter < currentStepList.size()) {
+
+                            if (counter+1==currentStepList.size()){
+                                nextButton.setVisibility(View.INVISIBLE);
+                            }
+
                             if (previousButton.getVisibility() == View.INVISIBLE) {
                                 previousButton.setVisibility(View.VISIBLE);
                             }
@@ -163,13 +166,10 @@ public class RecipeStepFragment extends Fragment {
 
                             if (currentStepList.get(counter).getVideoURL().isEmpty()){
                                 changeVideo(currentStepList.get(counter).getThumbnailURL());
-                            }
-                            if(!currentStepList.get(counter).getVideoURL().isEmpty()){
+                            }else{
                                 changeVideo(currentStepList.get(counter).getVideoURL());
                             }
 
-                        } else {
-                            nextButton.setVisibility(View.INVISIBLE);
                         }
 
                     }
@@ -202,8 +202,6 @@ public class RecipeStepFragment extends Fragment {
                             if (nextButton.getVisibility() == View.INVISIBLE) {
                                 nextButton.setVisibility(View.VISIBLE);
                             }
-                        } else {
-                            previousButton.setVisibility(View.INVISIBLE);
                         }
                     }
                 }

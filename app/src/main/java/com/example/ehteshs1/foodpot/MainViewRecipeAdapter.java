@@ -27,7 +27,6 @@ public class MainViewRecipeAdapter extends RecyclerView.Adapter<MainViewRecipeAd
     private SharedPreferences sharedPrefs;
     private Gson gson;
     private SharedPreferences.Editor editor;
-    private Ingredient ingredientList;
 
 
     public MainViewRecipeAdapter(Context context){
@@ -62,7 +61,6 @@ public class MainViewRecipeAdapter extends RecyclerView.Adapter<MainViewRecipeAd
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mContext,title,Toast.LENGTH_SHORT).show();
                 Intent recipeDetailIntent = new Intent(mContext,DetailRecipeActivity.class);
                 recipeDetailIntent.putExtra("recipeDetails",currentRecipe);
                 mContext.startActivity(recipeDetailIntent);

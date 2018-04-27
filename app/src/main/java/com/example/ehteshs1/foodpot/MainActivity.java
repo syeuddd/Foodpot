@@ -27,8 +27,8 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity implements FetchRecipes.FetchRecipeInterface{
 
 
-    MainViewRecipeAdapter adapter;
-    ArrayList<Recipy> recipies;
+    private MainViewRecipeAdapter adapter;
+    private ArrayList<Recipy> recipies;
 
     @BindView(R.id.recipeListrecyclerView) RecyclerView recipeRecyclerView;
     @BindView(R.id.progressBar) ProgressBar bar;

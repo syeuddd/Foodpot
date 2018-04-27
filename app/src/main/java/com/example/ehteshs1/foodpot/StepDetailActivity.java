@@ -22,8 +22,8 @@ import java.util.ArrayList;
 
 public class StepDetailActivity extends AppCompatActivity {
 
-    ArrayList<Step> currentStepList;
-    int counter = 0;
+    private ArrayList<Step> currentStepList;
+    private int counter = 0;
     TextView description;
     SimpleExoPlayer player;
     BandwidthMeter bandwidthMeter;

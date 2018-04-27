@@ -2,9 +2,6 @@ package com.example.ehteshs1.foodpot.Utils;
 
 import java.io.IOException;
 
-/**
- * Created by ehteshs1 on 2018/03/21.
- */
 
 public class NetworkUtils {
 
