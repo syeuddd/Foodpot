@@ -21,6 +21,14 @@
 
         </com.google.android.exoplayer2.ui.SimpleExoPlayerView>
 
+        <ImageView
+            android:id="@+id/thumbnailView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:scaleType="fitXY" />
+
         <TextView
             android:id="@+id/noVideoErrorTextView"
             android:layout_width="match_parent"

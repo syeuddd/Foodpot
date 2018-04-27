@@ -36,6 +36,7 @@ public class StepDetailActivity extends AppCompatActivity {
     String videoUrl;
     SimpleExoPlayerView recipeView;
     TextView errorTextView;
+    RecipeStepFragment recipeStepFragment;
 
 
     @Override
@@ -56,15 +57,18 @@ public class StepDetailActivity extends AppCompatActivity {
         bundle.putParcelableArrayList("stepList",currentStepList);
         bundle.putInt("counter",counter);
 
-        RecipeStepFragment recipeStepFragment = new RecipeStepFragment();
-        recipeStepFragment.setArguments(bundle);
+        if (savedInstanceState!=null){
+           recipeStepFragment = (RecipeStepFragment)getSupportFragmentManager().getFragment(savedInstanceState,"fragment");
+        }else {
+            recipeStepFragment = new RecipeStepFragment();
+        }
+            recipeStepFragment.setArguments(bundle);
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentManager fragmentManager = getSupportFragmentManager();
 
-        fragmentManager.beginTransaction()
-                .add(R.id.stepDetailFragment,recipeStepFragment)
-                .commit();
-
+            fragmentManager.beginTransaction()
+                    .replace(R.id.stepDetailFragment,recipeStepFragment)
+                    .commit();
     }
 
     @Override
@@ -75,6 +79,14 @@ public class StepDetailActivity extends AppCompatActivity {
                 finish();
         }
         return true;
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        getSupportFragmentManager().putFragment(outState,"fragment",recipeStepFragment);
     }
 
 }

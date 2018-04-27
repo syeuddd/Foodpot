@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,12 +56,14 @@ public class RecipeStepFragment extends Fragment {
     private MediaSource mediaSource;
     private Context mContext;
     private boolean tabletLayout;
+    private boolean loadedFromSavedInstanceState;
 
      @BindView(R.id.playerView) SimpleExoPlayerView recipeView;
      @BindView(R.id.noVideoErrorTextView) TextView errorTextView;
      @BindView(R.id.stepDescription) TextView recipeDescription;
      @BindView(R.id.nextStepButton) Button nextButton;
      @BindView(R.id.previousStepButton) Button previousButton;
+     @BindView(R.id.thumbnailView) ImageView thumbnailImageView;
 
     public RecipeStepFragment() {
 
@@ -93,23 +96,18 @@ public class RecipeStepFragment extends Fragment {
             mContext = getActivity();
         }
 
+        initPlayer();
 
-        bandwidthMeter = new DefaultBandwidthMeter();
-
-        extractorsFactory = new DefaultExtractorsFactory();
-
-        trackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
-
-        trackSelector = new DefaultTrackSelector(trackSelectionFactory);
-
-        defaultBandwidthMeter = new DefaultBandwidthMeter();
-
-        dataSourceFactory = new DefaultDataSourceFactory(mContext, Util.getUserAgent(mContext, "foodPot"), defaultBandwidthMeter);
-
-        player = ExoPlayerFactory.newSimpleInstance(mContext, trackSelector);
-
-        player.setVideoScalingMode(C.VIDEO_SCALING_MODE_SCALE_TO_FIT);
-
+        if (savedInstanceState!=null){
+            Boolean status = savedInstanceState.getBoolean("playStatus");
+            long currentPosition = savedInstanceState.getLong("currentPosition");
+            player.setPlayWhenReady(status);
+            player.seekTo(currentPosition);
+            loadedFromSavedInstanceState=true;
+        }else {
+            loadedFromSavedInstanceState=false;
+            player.setPlayWhenReady(true);
+        }
 
 
         if (currentStepList != null) {
@@ -119,18 +117,20 @@ public class RecipeStepFragment extends Fragment {
 
             Step currentStep = currentStepList.get(counter);
             String url="";
+            String  thumburl="";
             if (currentStep.getVideoURL().isEmpty()){
 
                 if (!currentStep.getThumbnailURL().isEmpty()){
 
-                    url = currentStep.getThumbnailURL();
+                     thumburl = currentStep.getThumbnailURL();
                 }
             }else {
                 url = currentStep.getVideoURL();
             }
             recipeDescription.setText(currentStep.getDescription());
 
-            changeVideo(url);
+
+           changeMedia(url,thumburl);
         }
 
         if (!tabletLayout) {
@@ -164,11 +164,7 @@ public class RecipeStepFragment extends Fragment {
                             recipeDescription.setText(currentStepList.get(counter).getDescription());
                             player.setPlayWhenReady(false);
 
-                            if (currentStepList.get(counter).getVideoURL().isEmpty()){
-                                changeVideo(currentStepList.get(counter).getThumbnailURL());
-                            }else{
-                                changeVideo(currentStepList.get(counter).getVideoURL());
-                            }
+                            changeMedia(currentStepList.get(counter).getVideoURL(),currentStepList.get(counter).getThumbnailURL());
 
                         }
 
@@ -191,13 +187,8 @@ public class RecipeStepFragment extends Fragment {
                             recipeDescription.setText(currentStepList.get(counter).getDescription());
                             player.setPlayWhenReady(false);
 
-                            if (currentStepList.get(counter).getVideoURL().isEmpty()){
-                                changeVideo(currentStepList.get(counter).getThumbnailURL());
-                            }
+                            changeMedia(currentStepList.get(counter).getVideoURL(),currentStepList.get(counter).getThumbnailURL());
 
-                            else {
-                                changeVideo(currentStepList.get(counter).getVideoURL());
-                            }
 
                             if (nextButton.getVisibility() == View.INVISIBLE) {
                                 nextButton.setVisibility(View.VISIBLE);
@@ -208,35 +199,86 @@ public class RecipeStepFragment extends Fragment {
             });
         }
 
-
         return rootView;
 
 
     }
 
+    private void initPlayer(){
 
-    private void changeVideo(String url) {
+        bandwidthMeter = new DefaultBandwidthMeter();
 
-        if (!url.isEmpty() && player != null && recipeView != null) {
+        extractorsFactory = new DefaultExtractorsFactory();
 
-            mediaSource = new ExtractorMediaSource(Uri.parse(url), dataSourceFactory, extractorsFactory, null, null);
+        trackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
 
-            player.prepare(mediaSource);
-            player.setPlayWhenReady(true);
+        trackSelector = new DefaultTrackSelector(trackSelectionFactory);
 
-            recipeView.requestFocus();
-            recipeView.setPlayer(player);
+        defaultBandwidthMeter = new DefaultBandwidthMeter();
 
-            recipeView.setVisibility(View.VISIBLE);
-            errorTextView.setVisibility(View.GONE);
+        dataSourceFactory = new DefaultDataSourceFactory(mContext, Util.getUserAgent(mContext, "foodPot"), defaultBandwidthMeter);
 
-        } else {
+        player = ExoPlayerFactory.newSimpleInstance(mContext, trackSelector);
 
-            recipeView.setVisibility(View.GONE);
-            errorTextView.setVisibility(View.VISIBLE);
-        }
+        player.setVideoScalingMode(C.VIDEO_SCALING_MODE_SCALE_TO_FIT);
 
     }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+
+        outState.putBoolean("playStatus",player.getPlayWhenReady());
+        outState.putLong("currentPosition",player.getCurrentPosition());
+        super.onSaveInstanceState(outState);
+    }
+
+
+    private void changeMedia(String url, String mthumbnailUrl) {
+
+
+            if (!url.isEmpty() && player != null && recipeView != null) {
+
+                mediaSource = new ExtractorMediaSource(Uri.parse(url), dataSourceFactory, extractorsFactory, null, null);
+
+                player.prepare(mediaSource);
+
+                if (!loadedFromSavedInstanceState){
+                    player.setPlayWhenReady(true);
+                }
+
+
+                recipeView.requestFocus();
+                recipeView.setPlayer(player);
+
+                recipeView.setVisibility(View.VISIBLE);
+                thumbnailImageView.setVisibility(View.GONE);
+                errorTextView.setVisibility(View.GONE);
+
+            } else if (!TextUtils.isEmpty(mthumbnailUrl)) {
+
+                boolean fileFormat = mthumbnailUrl.endsWith("mp4");
+
+                if (!fileFormat) {
+                    recipeView.setVisibility(View.GONE);
+                    errorTextView.setVisibility(View.GONE);
+                    thumbnailImageView.setVisibility(View.VISIBLE);
+
+                    Picasso.get()
+                            .load(mthumbnailUrl)
+                            .into(thumbnailImageView);
+                }
+
+            } else {
+
+                recipeView.setVisibility(View.GONE);
+                errorTextView.setVisibility(View.VISIBLE);
+                thumbnailImageView.setVisibility(View.GONE);
+            }
+
+    }
+
+
 
     private void releasePlayer() {
         if (player != null) {
@@ -250,13 +292,13 @@ public class RecipeStepFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        player.setPlayWhenReady(true);
+      //  player.setPlayWhenReady(true);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        player.setPlayWhenReady(false);
+      //  player.setPlayWhenReady(false);
     }
 
     @Override

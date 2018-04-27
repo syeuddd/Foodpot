@@ -17,8 +17,6 @@ import java.util.ArrayList;
 
 public class DetailRecipeActivity extends AppCompatActivity implements OnStepClickListener{
 
-
-
     private Recipy mRecipy;
     private boolean mTwoPane;
     private ArrayList<Ingredient> mIngredients;
@@ -123,7 +121,7 @@ public class DetailRecipeActivity extends AppCompatActivity implements OnStepCli
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         fragmentManager.beginTransaction()
-                .add(R.id.recipeDetailFragment,detailRecipeFragment)
+                .replace(R.id.recipeDetailFragment,detailRecipeFragment)
                 .commit();
     }
 }
