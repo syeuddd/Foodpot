@@ -236,7 +236,6 @@ public class RecipeStepFragment extends Fragment {
 
     private void changeMedia(String url, String mthumbnailUrl) {
 
-
             if (!url.isEmpty() && player != null && recipeView != null) {
 
                 mediaSource = new ExtractorMediaSource(Uri.parse(url), dataSourceFactory, extractorsFactory, null, null);
@@ -246,7 +245,6 @@ public class RecipeStepFragment extends Fragment {
                 if (!loadedFromSavedInstanceState){
                     player.setPlayWhenReady(true);
                 }
-
 
                 recipeView.requestFocus();
                 recipeView.setPlayer(player);
@@ -260,6 +258,7 @@ public class RecipeStepFragment extends Fragment {
                 boolean fileFormat = mthumbnailUrl.endsWith("mp4");
 
                 if (!fileFormat) {
+
                     recipeView.setVisibility(View.GONE);
                     errorTextView.setVisibility(View.GONE);
                     thumbnailImageView.setVisibility(View.VISIBLE);
@@ -267,6 +266,11 @@ public class RecipeStepFragment extends Fragment {
                     Picasso.get()
                             .load(mthumbnailUrl)
                             .into(thumbnailImageView);
+                }else {
+
+                    recipeView.setVisibility(View.GONE);
+                    errorTextView.setVisibility(View.VISIBLE);
+                    thumbnailImageView.setVisibility(View.GONE);
                 }
 
             } else {

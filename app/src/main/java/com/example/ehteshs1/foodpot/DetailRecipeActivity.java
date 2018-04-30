@@ -41,7 +41,7 @@ public class DetailRecipeActivity extends AppCompatActivity implements OnStepCli
 
         if (findViewById(R.id.twoPaneLayout)!=null){
             mTwoPane = true;
-            initializeStepFragment(0);
+            initializeStepFragment(1);
         }
 
         initializeRecipeDetailsFragment();
@@ -88,7 +88,9 @@ public class DetailRecipeActivity extends AppCompatActivity implements OnStepCli
 
         if (position==0){
 
-            Toast.makeText(this,"Ingredients",Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this,IngredientsListActivity.class);
+            intent.putParcelableArrayListExtra("ingredientList",mIngredients);
+            startActivity(intent);
 
         }else {
 
