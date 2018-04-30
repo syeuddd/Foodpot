@@ -57,6 +57,7 @@ public class RecipeStepFragment extends Fragment {
     private Context mContext;
     private boolean tabletLayout;
     private boolean loadedFromSavedInstanceState;
+    private boolean videoPlayStatus = true;
 
      @BindView(R.id.playerView) SimpleExoPlayerView recipeView;
      @BindView(R.id.noVideoErrorTextView) TextView errorTextView;
@@ -99,15 +100,13 @@ public class RecipeStepFragment extends Fragment {
         initPlayer();
 
         if (savedInstanceState!=null){
-            Boolean status = savedInstanceState.getBoolean("playStatus");
+            videoPlayStatus = savedInstanceState.getBoolean("playStatus");
             long currentPosition = savedInstanceState.getLong("currentPosition");
-            player.setPlayWhenReady(status);
+            counter = savedInstanceState.getInt("currentItemPosition");
             player.seekTo(currentPosition);
-            loadedFromSavedInstanceState=true;
-        }else {
-            loadedFromSavedInstanceState=false;
-            player.setPlayWhenReady(true);
         }
+
+        player.setPlayWhenReady(videoPlayStatus);
 
 
         if (currentStepList != null) {
@@ -230,6 +229,7 @@ public class RecipeStepFragment extends Fragment {
 
         outState.putBoolean("playStatus",player.getPlayWhenReady());
         outState.putLong("currentPosition",player.getCurrentPosition());
+        outState.putInt("currentItemPosition",counter);
         super.onSaveInstanceState(outState);
     }
 
@@ -242,9 +242,7 @@ public class RecipeStepFragment extends Fragment {
 
                 player.prepare(mediaSource);
 
-                if (!loadedFromSavedInstanceState){
-                    player.setPlayWhenReady(true);
-                }
+                player.setPlayWhenReady(videoPlayStatus);
 
                 recipeView.requestFocus();
                 recipeView.setPlayer(player);
@@ -299,10 +297,16 @@ public class RecipeStepFragment extends Fragment {
       //  player.setPlayWhenReady(true);
     }
 
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//       player.release();
+//    }
+
     @Override
-    public void onPause() {
-        super.onPause();
-      //  player.setPlayWhenReady(false);
+    public void onStop() {
+        super.onStop();
+        player.release();
     }
 
     @Override

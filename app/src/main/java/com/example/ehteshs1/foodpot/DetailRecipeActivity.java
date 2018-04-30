@@ -1,6 +1,7 @@
 package com.example.ehteshs1.foodpot;
 
 import android.content.Intent;
+import android.os.PersistableBundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ public class DetailRecipeActivity extends AppCompatActivity implements OnStepCli
     private boolean mTwoPane;
     private ArrayList<Ingredient> mIngredients;
     private ArrayList<Step> mRecipeSteps;
+    DetailRecipeFragment detailRecipeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,10 @@ public class DetailRecipeActivity extends AppCompatActivity implements OnStepCli
         if (findViewById(R.id.twoPaneLayout)!=null){
             mTwoPane = true;
             initializeStepFragment(1);
+        }
+
+        if (savedInstanceState!= null){
+            detailRecipeFragment = (DetailRecipeFragment) getSupportFragmentManager().getFragment(savedInstanceState,"fragment");
         }
 
         initializeRecipeDetailsFragment();
@@ -116,7 +122,10 @@ public class DetailRecipeActivity extends AppCompatActivity implements OnStepCli
         Bundle recipeBundle = new Bundle();
         recipeBundle.putParcelable("recipe",mRecipy);
 
-        DetailRecipeFragment detailRecipeFragment = new DetailRecipeFragment();
+        if (detailRecipeFragment==null){
+            detailRecipeFragment = new DetailRecipeFragment();
+        }
+
         detailRecipeFragment.setArguments(recipeBundle);
 
 
@@ -125,5 +134,12 @@ public class DetailRecipeActivity extends AppCompatActivity implements OnStepCli
         fragmentManager.beginTransaction()
                 .replace(R.id.recipeDetailFragment,detailRecipeFragment)
                 .commit();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+
+        getSupportFragmentManager().putFragment(outState,"fragment",detailRecipeFragment);
     }
 }
