@@ -46,9 +46,9 @@ public class DetailRecipeActivity extends AppCompatActivity implements OnStepCli
             initializeStepFragment(1);
         }
 
-        if (savedInstanceState!= null){
-            detailRecipeFragment = (DetailRecipeFragment) getSupportFragmentManager().getFragment(savedInstanceState,"fragment");
-        }
+//        if (savedInstanceState!= null){
+//            detailRecipeFragment = (DetailRecipeFragment) getSupportFragmentManager().getFragment(savedInstanceState,"fragment");
+//        }
 
         initializeRecipeDetailsFragment();
 
@@ -134,12 +134,5 @@ public class DetailRecipeActivity extends AppCompatActivity implements OnStepCli
         fragmentManager.beginTransaction()
                 .replace(R.id.recipeDetailFragment,detailRecipeFragment)
                 .commit();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        super.onSaveInstanceState(outState, outPersistentState);
-
-        getSupportFragmentManager().putFragment(outState,"fragment",detailRecipeFragment);
     }
 }
