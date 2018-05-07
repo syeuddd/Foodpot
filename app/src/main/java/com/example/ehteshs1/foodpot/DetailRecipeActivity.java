@@ -1,6 +1,7 @@
 package com.example.ehteshs1.foodpot;
 
 import android.content.Intent;
+import android.os.Parcelable;
 import android.os.PersistableBundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +24,7 @@ public class DetailRecipeActivity extends AppCompatActivity implements OnStepCli
     private ArrayList<Ingredient> mIngredients;
     private ArrayList<Step> mRecipeSteps;
     DetailRecipeFragment detailRecipeFragment;
+    Parcelable savedRecyclerLayoutState ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,11 +85,8 @@ public class DetailRecipeActivity extends AppCompatActivity implements OnStepCli
                 startActivity(detailStepIntent);
             }
         }else {
-
             initializeStepFragment(position);
-
         }
-
     }
 
     private void initializeStepFragment(int position) {
@@ -113,26 +112,44 @@ public class DetailRecipeActivity extends AppCompatActivity implements OnStepCli
                     .replace(R.id.stepDetailFragment,recipeStepFragment)
                     .commit();
         }
-
-
     }
 
-
     private void initializeRecipeDetailsFragment() {
+
         Bundle recipeBundle = new Bundle();
         recipeBundle.putParcelable("recipe",mRecipy);
 
-        if (detailRecipeFragment==null){
-            detailRecipeFragment = new DetailRecipeFragment();
-        }
+        detailRecipeFragment = new DetailRecipeFragment();
 
         detailRecipeFragment.setArguments(recipeBundle);
-
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         fragmentManager.beginTransaction()
                 .replace(R.id.recipeDetailFragment,detailRecipeFragment)
                 .commit();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("Bundle",detailRecipeFragment.manager.onSaveInstanceState());
+
+    }
+
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        savedRecyclerLayoutState = savedInstanceState.getParcelable("Bundle");
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        detailRecipeFragment.manager.onRestoreInstanceState(savedRecyclerLayoutState);
     }
 }
