@@ -294,25 +294,13 @@ public class RecipeStepFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-      //  player.setPlayWhenReady(true);
-    }
 
-//    @Override
-//    public void onPause() {
-//        super.onPause();
-//       player.release();
-//    }
+    }
 
     @Override
     public void onStop() {
         super.onStop();
-        player.release();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        releasePlayer();
+       releasePlayer();
     }
 
 

@@ -1,6 +1,9 @@
 package com.example.ehteshs1.foodpot;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -40,6 +43,8 @@ public class MainActivity extends AppCompatActivity implements FetchRecipes.Fetc
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
+
+        updateWidget();
 
         adapter = new MainViewRecipeAdapter(this);
 
@@ -94,6 +99,18 @@ public class MainActivity extends AppCompatActivity implements FetchRecipes.Fetc
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
+
+    private void updateWidget(){
+
+
+        Intent intent = new Intent(this, IgredientsListWidget.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        int[] ids = AppWidgetManager.getInstance(getApplication())
+                .getAppWidgetIds(new ComponentName(getApplication(),IgredientsListWidget.class));
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        intent.putExtra("test","test from Mainactivity");
+        sendBroadcast(intent);
     }
 
 }

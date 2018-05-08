@@ -1,5 +1,7 @@
 package com.example.ehteshs1.foodpot;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -84,7 +86,20 @@ public class MainViewRecipeAdapter extends RecyclerView.Adapter<MainViewRecipeAd
         editor.putString("ingredientInfo", IgredientJSon);
 
         editor.commit();
+        updateWidget();
 
+    }
+
+
+    private void updateWidget(){
+
+
+        Intent intent = new Intent(mContext, IgredientsListWidget.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        int[] ids = AppWidgetManager.getInstance(mContext.getApplicationContext())
+                .getAppWidgetIds(new ComponentName(mContext.getApplicationContext(),IgredientsListWidget.class));
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        mContext.sendBroadcast(intent);
     }
 
     @Override

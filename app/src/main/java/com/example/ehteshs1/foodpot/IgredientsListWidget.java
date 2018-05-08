@@ -24,43 +24,44 @@ import butterknife.BindView;
  */
 public class IgredientsListWidget extends AppWidgetProvider {
 
-    private static IngredientListViewAdapter adapter;
     private static ArrayList<Ingredient> ingredientArrayList;
     @BindView(R.id.ingredientRecyclerView)
     RecyclerView ingredientRecyclerView;
     private static SharedPreferences sharedPrefs;
     private static Gson gson;
     private String recipeName;
-    private static Context mContext;
     private static StringBuilder builder;
 
     private static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
-        loadIngredientsFromLocalStorage();
+        gson = new Gson();
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+        String jSon = sharedPrefs.getString("ingredientInfo", "");
+
+        if (!jSon.equals("")) {
+
+            Recipy storedIngredientList = gson.fromJson(jSon, Recipy.class);
+
+            ingredientArrayList = (ArrayList<Ingredient>) storedIngredientList.getIngredients();
+        }
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.igredients_list);
 
-        if (ingredientArrayList!=null){
+        if (ingredientArrayList!=null) {
             builder = new StringBuilder(ingredientArrayList.size());
-            for (int i =0; i<ingredientArrayList.size(); i++){
+            for (int i = 0; i < ingredientArrayList.size(); i++) {
 
                 Ingredient recipe = ingredientArrayList.get(i);
                 String ingredient = recipe.getIngredient();
 
-                String completeList = builder.append(ingredient+" ,").toString();
+                String completeList = builder.append(ingredient + " ,").toString();
 
-                Log.i("widgetIngredientsLoaded",completeList);
+                Log.i("widgetIngredientsLoaded", completeList);
                 views.setTextViewText(R.id.appwidget_text, completeList);
             }
         }
-        CharSequence widgetText = context.getString(R.string.appwidget_text);
-        mContext = context;
-
-        // Construct the RemoteViews object
-
-
-
 
         Intent widgetActivity = new Intent(context,IngredientsListActivity.class);
         widgetActivity.putExtra("loadedFromwidget",true);
@@ -69,10 +70,6 @@ public class IgredientsListWidget extends AppWidgetProvider {
 
         views.setOnClickPendingIntent(R.id.appwidget_text,pendingIntent);
 
-
-
-
-
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
@@ -80,7 +77,6 @@ public class IgredientsListWidget extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
-        mContext = context;
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
@@ -94,27 +90,6 @@ public class IgredientsListWidget extends AppWidgetProvider {
     @Override
     public void onDisabled(Context context) {
         // Enter relevant functionality for when the last widget is disabled
-    }
-
-
-    private static void loadIngredientsFromLocalStorage(){
-
-        gson = new Gson();
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-
-        String jSon = sharedPrefs.getString("ingredientInfo", "");
-
-        if (!jSon.equals("")){
-
-            Recipy storedIngredientList = gson.fromJson(jSon, Recipy.class);
-
-            ingredientArrayList = (ArrayList<Ingredient>) storedIngredientList.getIngredients();
-           // recipeName = storedIngredientList.getName();
-
-            //setTitle(recipeName);
-
-
-        }
     }
 }
 
