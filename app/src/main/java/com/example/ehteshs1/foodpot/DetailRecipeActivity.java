@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -25,6 +26,7 @@ public class DetailRecipeActivity extends AppCompatActivity implements OnStepCli
     private ArrayList<Step> mRecipeSteps;
     DetailRecipeFragment detailRecipeFragment;
     Parcelable savedRecyclerLayoutState ;
+    RecipeStepFragment recipeStepFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +105,7 @@ public class DetailRecipeActivity extends AppCompatActivity implements OnStepCli
             bundle.putParcelableArrayList("stepList",mRecipeSteps);
             bundle.putInt("counter",position-1);
 
-            RecipeStepFragment recipeStepFragment = new RecipeStepFragment();
+            recipeStepFragment = new RecipeStepFragment();
             recipeStepFragment.setArguments(bundle);
 
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -149,7 +151,19 @@ public class DetailRecipeActivity extends AppCompatActivity implements OnStepCli
     @Override
     protected void onResume() {
         super.onResume();
-
         detailRecipeFragment.manager.onRestoreInstanceState(savedRecyclerLayoutState);
+
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.i("LifecycleTesting","Activity onStop is triggered");
+
+//        if (recipeStepFragment!=null){
+//            recipeStepFragment.player.release();
+//        }
+
     }
 }

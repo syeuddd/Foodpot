@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +47,7 @@ public class RecipeStepFragment extends Fragment {
     private ArrayList<Step> currentStepList;
     private int counter = 0;
 
-    private SimpleExoPlayer player;
+    SimpleExoPlayer player;
     private BandwidthMeter bandwidthMeter;
     private ExtractorsFactory extractorsFactory;
     private TrackSelection.Factory trackSelectionFactory;
@@ -58,6 +59,7 @@ public class RecipeStepFragment extends Fragment {
     private boolean tabletLayout;
     private boolean loadedFromSavedInstanceState;
     private boolean videoPlayStatus = true;
+    private long currentVideoPosition;
 
      @BindView(R.id.playerView) SimpleExoPlayerView recipeView;
      @BindView(R.id.noVideoErrorTextView) TextView errorTextView;
@@ -101,9 +103,9 @@ public class RecipeStepFragment extends Fragment {
 
         if (savedInstanceState!=null){
             videoPlayStatus = savedInstanceState.getBoolean("playStatus");
-            long currentPosition = savedInstanceState.getLong("currentPosition");
+            currentVideoPosition = savedInstanceState.getLong("currentPosition");
             counter = savedInstanceState.getInt("currentItemPosition");
-            player.seekTo(currentPosition);
+            player.seekTo(currentVideoPosition);
         }
 
         player.setPlayWhenReady(videoPlayStatus);
@@ -203,7 +205,7 @@ public class RecipeStepFragment extends Fragment {
 
     }
 
-    private void initPlayer(){
+     void initPlayer(){
 
         bandwidthMeter = new DefaultBandwidthMeter();
 
@@ -215,9 +217,9 @@ public class RecipeStepFragment extends Fragment {
 
         defaultBandwidthMeter = new DefaultBandwidthMeter();
 
-        dataSourceFactory = new DefaultDataSourceFactory(mContext, Util.getUserAgent(mContext, "foodPot"), defaultBandwidthMeter);
+        dataSourceFactory = new DefaultDataSourceFactory(mContext, Util.getUserAgent(getActivity(), "foodPot"), defaultBandwidthMeter);
 
-        player = ExoPlayerFactory.newSimpleInstance(mContext, trackSelector);
+        player = ExoPlayerFactory.newSimpleInstance(getActivity(), trackSelector);
 
         player.setVideoScalingMode(C.VIDEO_SCALING_MODE_SCALE_TO_FIT);
 
@@ -227,6 +229,7 @@ public class RecipeStepFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
 
+        Log.i("LifecycleTesting","Fragment onSavedInstanceState is triggered");
         outState.putBoolean("playStatus",player.getPlayWhenReady());
         outState.putLong("currentPosition",player.getCurrentPosition());
         outState.putInt("currentItemPosition",counter);
@@ -280,8 +283,6 @@ public class RecipeStepFragment extends Fragment {
 
     }
 
-
-
     private void releasePlayer() {
         if (player != null) {
             player.release();
@@ -294,13 +295,23 @@ public class RecipeStepFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        if (player==null){
+            initPlayer();
+            player.prepare(mediaSource);
+            player.setPlayWhenReady(videoPlayStatus);
+            player.seekTo(currentVideoPosition);
+            recipeView.requestFocus();
+            recipeView.setPlayer(player);
+        }
 
     }
 
     @Override
     public void onStop() {
         super.onStop();
-       releasePlayer();
+        currentVideoPosition = player.getCurrentPosition();
+        videoPlayStatus = player.getPlayWhenReady();
+        releasePlayer();
     }
 
 

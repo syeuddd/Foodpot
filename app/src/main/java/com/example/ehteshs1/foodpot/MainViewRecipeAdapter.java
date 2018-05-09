@@ -7,15 +7,19 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ehteshs1.foodpot.model.Ingredient;
 import com.example.ehteshs1.foodpot.model.Recipy;
+import com.example.ehteshs1.foodpot.model.Step;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -59,6 +63,13 @@ public class MainViewRecipeAdapter extends RecyclerView.Adapter<MainViewRecipeAd
         final String title = currentRecipe.getName();
 
         holder.recipeTitle.setText(title);
+
+//        String recipeVideoUrl = currentRecipe.getSteps().get(position).getVideoURL();
+//
+//            Picasso.get()
+//                    .load(R.drawable.example_appwidget_preview)
+//                    .into(holder.recipeImage);
+
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,6 +124,7 @@ public class MainViewRecipeAdapter extends RecyclerView.Adapter<MainViewRecipeAd
     class MyViewHolder extends RecyclerView.ViewHolder{
 
         @BindView(R.id.recipeTitle) TextView recipeTitle;
+        @BindView(R.id.recipeImage) ImageView recipeImage;
 
 
 
