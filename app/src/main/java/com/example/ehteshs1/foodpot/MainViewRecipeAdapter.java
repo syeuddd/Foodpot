@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import com.example.ehteshs1.foodpot.model.Ingredient;
 import com.example.ehteshs1.foodpot.model.Recipy;
 import com.example.ehteshs1.foodpot.model.Step;
 import com.google.gson.Gson;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -35,10 +37,13 @@ public class MainViewRecipeAdapter extends RecyclerView.Adapter<MainViewRecipeAd
     private SharedPreferences.Editor editor;
 
 
+
     public MainViewRecipeAdapter(Context context){
 
         mContext = context;
         gson =new Gson();
+
+
     }
 
     public void setData(ArrayList<Recipy> recipies){
@@ -64,12 +69,31 @@ public class MainViewRecipeAdapter extends RecyclerView.Adapter<MainViewRecipeAd
 
         holder.recipeTitle.setText(title);
 
-//        String recipeVideoUrl = currentRecipe.getSteps().get(position).getVideoURL();
-//
-//            Picasso.get()
-//                    .load(R.drawable.example_appwidget_preview)
-//                    .into(holder.recipeImage);
+        String recipeImage = currentRecipe.getImage();
 
+        if (!TextUtils.isEmpty(recipeImage)){
+            Picasso.get()
+                    .load(recipeImage)
+                    .into(holder.recipeImage);
+        }else {
+
+ //           holder.recipeImage.setImageResource(R.drawable.ic_cake_black);
+            Picasso.get()
+                    .load(R.drawable.ic_cake_black)
+                    .into(holder.recipeImage, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            Log.i("Picasso-Image-debug","Image loaded successfully");
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+
+                           e.printStackTrace();
+
+                        }
+                    });
+        }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

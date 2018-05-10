@@ -21,18 +21,18 @@
 
      <ImageView
          android:id="@+id/recipeImage"
-         android:layout_width="match_parent"
-         android:layout_height="match_parent"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_gravity="center"
          android:scaleType="fitXY"
-         android:visibility="gone"
-         tools:src="@drawable/example_appwidget_preview" />
+         tools:src="@drawable/ic_cake_black" />
 
        <TextView
         android:id="@+id/recipeTitle"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:textSize="24sp"
-        android:gravity="center"
+        android:layout_gravity="center_horizontal|bottom"
         tools:text="This is a test string" />
 
             <!-- android:layout_gravity="center_horizontal|bottom" -->
