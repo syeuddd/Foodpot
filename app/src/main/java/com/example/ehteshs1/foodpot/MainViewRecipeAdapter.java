@@ -77,22 +77,9 @@ public class MainViewRecipeAdapter extends RecyclerView.Adapter<MainViewRecipeAd
                     .into(holder.recipeImage);
         }else {
 
- //           holder.recipeImage.setImageResource(R.drawable.ic_cake_black);
             Picasso.get()
-                    .load(R.drawable.ic_cake_black)
-                    .into(holder.recipeImage, new Callback() {
-                        @Override
-                        public void onSuccess() {
-                            Log.i("Picasso-Image-debug","Image loaded successfully");
-                        }
-
-                        @Override
-                        public void onError(Exception e) {
-
-                           e.printStackTrace();
-
-                        }
-                    });
+                    .load(R.drawable.icon_cake)
+                    .into(holder.recipeImage);
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
